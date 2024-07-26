@@ -28,7 +28,7 @@ let persons = [
 
 app.use(express.json())
 app.use(cors())
-app.use(express.static('frontend'))
+app.use(express.static('dist'))
 
 morgan.token('body', function (req, res) { 
   if(req.method === "POST") {
