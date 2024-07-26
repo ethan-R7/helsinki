@@ -28,6 +28,7 @@ let persons = [
 
 app.use(express.json())
 app.use(cors())
+app.use(express.static('dist'))
 
 morgan.token('body', function (req, res) { 
   if(req.method === "POST") {
@@ -112,5 +113,7 @@ const unknownEndpoint = (req, res) => {
 app.use(unknownEndpoint)
 
 
-const PORT=3001
-app.listen(PORT)
+const PORT = process.env.PORT || 3001
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
