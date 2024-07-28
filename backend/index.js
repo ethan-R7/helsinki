@@ -93,43 +93,48 @@ app.post("/api/persons", (req, res, next) => {
   if(body.name === undefined || body.number === undefined) {
     return res.status(400).json({error: "content is missing"})
   } 
-  Phonebook.findOne({ name : body.name })
-  .then( contact => {
-    if(contact) {
 
-      const body = req.body
 
-      const filter = {name: body.name}
-      const update = {number: body.number}
+  
 
-      Phonebook.findOneAndUpdate(filter, update, {new: true})
-        .then(updatedPerson => {
-          if(updatedPerson) {
-            res.json(updatedPerson)
-          } else {
-            res.status(404).end()
-          }
-          
-        }).catch(error => next(error))
+  const filter = {name: body.name}
+  const update = {number: body.number}
+
+  Phonebook.findOneAndUpdate(filter, update, {new: true}, {upsert: true})
+    .then(updatedPerson => {
+      if(updatedPerson) {
+        res.json(updatedPerson)
+      } else {
+        res.status(404).end()
+      }
+      
+    }).catch(error => next(error))
+
+
+  // Phonebook.findOne({ name : body.name })
+  // .then( contact => {
+  //   if(contact) {
+
+      
 
     
-    } else {
-      console.log('NORMAL')
-      const person = new Phonebook({
-        number: body.number,
-        name: body.name
-      })
+  //   } else {
+  //     console.log('NORMAL')
+  //     const person = new Phonebook({
+  //       number: body.number,
+  //       name: body.name
+  //     })
       
-      person.save().then(savedPerson => {
-        if(savedPerson) {
-          res.json(savedPerson)
-        } else {
-          res.status(404).end()
-        }
+  //     person.save().then(savedPerson => {
+  //       if(savedPerson) {
+  //         res.json(savedPerson)
+  //       } else {
+  //         res.status(404).end()
+  //       }
         
-      }).catch(error => next(error))
-    }
-  })
+  //     }).catch(error => next(error))
+  //   }
+  // })
 
 })
 
